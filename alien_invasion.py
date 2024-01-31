@@ -23,7 +23,7 @@ class AlienInvasion:
         # self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
         
-        self.stats = games_stats(self)
+        self.stats = games_stats.GameStats(self)
         self.ship = ship.Ship(self)
         self.bullets = pygame.sprite.Group()
         self.bullet = bullet.Bullet(self)
@@ -43,37 +43,42 @@ class AlienInvasion:
             """Watch for keyboard and mouse events from helper method."""
             self._check_events()
                
-            """Move ship."""
-            self.ship.update()
+            if self.stats.game_active:
+                """Move ship."""
+                self.ship.update()
 
-            """Move bullets."""
-            self.bullets.update()
+                """Move bullets."""
+                self.bullets.update()
 
-            """Remove bullets."""
-            bullet.Bullet.remove_bullet(self)
+                """Remove bullets."""
+                bullet.Bullet.remove_bullet(self)
 
-            """Update the alien fleet."""
-            self._check_edges()
-            self.aliens.update()
-            self._new_fleet()
+                """Update the alien fleet."""
+                self._check_edges()
+                self.aliens.update()
+                self._new_fleet()
 
-            """Check for collisions."""
-            pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
-            if pygame.sprite.spritecollideany(self.ship, self.aliens):
-                self._ship_hit()
-                # print("Ship hit!!!")
+                """Check for collisions or invasion."""
+                pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+                if pygame.sprite.spritecollideany(self.ship, self.aliens):
+                    self._ship_hit()
+                    # print("Ship hit!!!")
+                self._alien_invades()
 
             """Redraw the screen based on helper method."""
             self._update_screen()
 
     def _ship_hit(self):
         """Respond to the ship being hit by an alien."""
-        self.stats.ships_left -= 1
-        self.bullets.empty()     
-        self.aliens.empty()       
-        self._create_fleet()        
-        self.ship.center_ship()
-        sleep(0.5)
+        if self.stats.ships_left > 0:
+            self.stats.ships_left -= 1  
+            self.bullets.empty()     
+            self.aliens.empty()       
+            self._create_fleet()        
+            self.ship.center_ship()
+            sleep(0.5)
+        else:
+            self.stats.game_active = False
     
     def _alien_invades(self):
         """Respond to a succesful alien invasion."""
