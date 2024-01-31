@@ -53,6 +53,7 @@ class AlienInvasion:
             """Update the alien fleet."""
             self._check_edges()
             self.aliens.update()
+            self._new_fleet()
 
             """Check for collisions."""
             pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)            
@@ -88,8 +89,13 @@ class AlienInvasion:
             if new_alien.check_edges():
                 alien.Alien.change_fleet_direction(self)
                 break
-              
     
+    def _new_fleet(self):
+        """Create new fleet after current one is destroyed."""
+        if not self.aliens:
+            self.bullets.empty()
+            self._create_fleet()
+      
     def _check_events(self):
         """Respond to keypresses and mouse events."""
         for event in pygame.event.get():
