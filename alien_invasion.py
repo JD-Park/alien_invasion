@@ -5,6 +5,7 @@ import ship
 import alien
 import settings
 import games_stats
+import menu
 
 from time import sleep
 
@@ -24,6 +25,7 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
         
         self.stats = games_stats.GameStats(self)
+        self.menu = menu.StartScreen(self)
         self.ship = ship.Ship(self)
         self.bullets = pygame.sprite.Group()
         self.bullet = bullet.Bullet(self)
@@ -36,6 +38,9 @@ class AlienInvasion:
 
         """Set background color."""
         self.bg_color = self.settings.bg_color
+
+        """Create play button."""
+        self.play_button = menu.Button(self, "Play")
         
     def run_game(self): 
         """Start the main loop for the game."""
@@ -148,14 +153,31 @@ class AlienInvasion:
                     self.ship.moving_left = False
                 elif event.key == pygame.K_SPACE:
                     self.firing = False
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
    
+    def _check_play_button(self, mouse_pos):
+        """Start the game when play button is clicked."""
+        if self.play_button.rect.collidepoint(mouse_pos):
+            self.stats.game_active = True
+
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
-        self.screen.fill(self.bg_color)
-        self.ship.blitme()
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
-        self.aliens.draw(self.screen)
+        """Draw the menu buttons."""
+        if not self.stats.game_active:
+            self.menu.blitme()
+            self.play_button.draw_button()
+        
+        else:
+            self.screen.fill(self.bg_color)
+            self.ship.blitme()
+            for bullet in self.bullets.sprites():
+                bullet.draw_bullet()
+            self.aliens.draw(self.screen)
+
+
 
         """Make the most recently drawn screen visible."""
         pygame.display.flip()
