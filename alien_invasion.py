@@ -39,8 +39,10 @@ class AlienInvasion:
         """Set background color."""
         self.bg_color = self.settings.bg_color
 
-        """Create play button."""
+        """Create the buttons."""
         self.play_button = menu.Button(self, "Play")
+
+        self.lives = menu.Button(self, str(self.stats.ships_left))
         
     def run_game(self): 
         """Start the main loop for the game."""
@@ -75,7 +77,7 @@ class AlienInvasion:
 
     def _ship_hit(self):
         """Respond to the ship being hit by an alien."""
-        if self.stats.ships_left > 0:
+        if self.stats.ships_left >= 1:
             self.stats.ships_left -= 1  
             self.bullets.empty()     
             self.aliens.empty()       
@@ -160,7 +162,9 @@ class AlienInvasion:
    
     def _check_play_button(self, mouse_pos):
         """Start the game when play button is clicked."""
-        if self.play_button.rect.collidepoint(mouse_pos):
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.stats.game_active:
+            self.stats.reset_stats()
             self.stats.game_active = True
 
     def _update_screen(self):
@@ -172,6 +176,7 @@ class AlienInvasion:
         
         else:
             self.screen.fill(self.bg_color)
+            self.lives.update(str(self.stats.ships_left))
             self.ship.blitme()
             for bullet in self.bullets.sprites():
                 bullet.draw_bullet()
