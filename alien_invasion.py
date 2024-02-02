@@ -81,7 +81,7 @@ class AlienInvasion:
 
     def _ship_hit(self):
         """Respond to the ship being hit by an alien."""
-        if self.stats.ships_left >= 1:
+        if self.stats.ships_left > 1:
             self.stats.ships_left -= 1  
             self.sb.prep_ships()
             self.bullets.empty()     
@@ -146,7 +146,6 @@ class AlienInvasion:
                 self.stats.score += self.settings.alien_points * len(new_alien)
             self.sb.prep_score()
             self.sb.check_hs()
-
       
     def _check_events(self):
         """Respond to keypresses and mouse events."""

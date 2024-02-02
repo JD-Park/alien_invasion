@@ -44,6 +44,10 @@ class Ship(Sprite):
         """Draw the ship at its current location."""
         self.screen.blit(self.image, self.rect)
 
+    def draw_lives(self):
+        """Draw smaller ships to show remaining lives."""
+        self.screen.blit(self.image2, self.rect)
+
     def center_ship(self):
         """Re-center the ship."""
         self.rect.midbottom = self.screen_rect.midbottom
