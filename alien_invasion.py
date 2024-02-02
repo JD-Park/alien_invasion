@@ -4,7 +4,7 @@ import bullet
 import ship
 import alien
 import settings
-import games_stats
+import game_stats
 import menu
 import scoreboard
 
@@ -25,7 +25,7 @@ class AlienInvasion:
         # self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
         
-        self.stats = games_stats.GameStats(self)
+        self.stats = game_stats.GameStats(self)
         self.sb = scoreboard.Scoreboard(self)
         self.menu = menu.StartScreen(self)
         self.ship = ship.Ship(self)
@@ -68,11 +68,13 @@ class AlienInvasion:
                 self._new_fleet()
 
                 """Check for collisions or invasion."""
-                pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+                self.collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, 
+                                                        False, True)
                 if pygame.sprite.spritecollideany(self.ship, self.aliens):
                     self._ship_hit()
                     # print("Ship hit!!!")
                 self._alien_invades()
+                self._score_keeping()
 
             """Redraw the screen based on helper method."""
             self._update_screen()
@@ -132,7 +134,16 @@ class AlienInvasion:
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
-            self.settings.increase_speed()
+            self.settings.increase_stats()
+
+    def _score_keeping(self):
+        """Check collisions to update score."""
+        if self.collisions:
+            for new_alien in self.collisions.values():
+                self.stats.score += self.settings.alien_points * len(new_alien)
+            self.sb.prep_score()
+            self.sb.check_hs()
+
       
     def _check_events(self):
         """Respond to keypresses and mouse events."""
@@ -171,6 +182,7 @@ class AlienInvasion:
             self.settings.initialize_dynamic_settings()
             self.stats.reset_stats()
             self.stats.game_active = True
+            self.sb.prep_score()
             pygame.mouse.set_visible(False)
 
     def _update_screen(self):
