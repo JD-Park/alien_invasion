@@ -135,6 +135,8 @@ class AlienInvasion:
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_stats()
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _score_keeping(self):
         """Check collisions to update score."""
@@ -183,6 +185,7 @@ class AlienInvasion:
             self.stats.reset_stats()
             self.stats.game_active = True
             self.sb.prep_score()
+            self.sb.prep_level()
             pygame.mouse.set_visible(False)
 
     def _update_screen(self):
