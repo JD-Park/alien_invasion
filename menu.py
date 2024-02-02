@@ -39,18 +39,18 @@ class Button:
         self.screen.fill(self.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
 
-    def draw_button_br(self):
-        """Draw blank button and then draw the message."""
-        self.msg_image_rect = self.msg_image.get_rect()
-        self.msg_image_rect.center = self.br.center
-        self.screen.fill(self.button_color, self.br)
-        self.screen.blit(self.msg_image, self.msg_image_rect)
+    # def draw_button_br(self):
+    #     """Draw blank button and then draw the message."""
+    #     self.msg_image_rect = self.msg_image.get_rect()
+    #     self.msg_image_rect.center = self.br.center
+    #     self.screen.fill(self.button_color, self.br)
+    #     self.screen.blit(self.msg_image, self.msg_image_rect)
 
-    def update(self, msg):
-        self._prep_msg(msg)
-        # self.msg_image = self.font.render(msg, True, self.text_color, self.button_color)
-        # self.rect = pygame.Rect(button_x, button_y, self.width, self.height)
-        self.draw_button_br()
+    # def update(self, msg):
+    #     self._prep_msg(msg)
+    #     # self.msg_image = self.font.render(msg, True, self.text_color, self.button_color)
+    #     # self.rect = pygame.Rect(button_x, button_y, self.width, self.height)
+    #     self.draw_button_br()
 
 
 class StartScreen:

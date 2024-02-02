@@ -6,6 +6,7 @@ import alien
 import settings
 import games_stats
 import menu
+import scoreboard
 
 from time import sleep
 
@@ -25,6 +26,7 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
         
         self.stats = games_stats.GameStats(self)
+        self.sb = scoreboard.Scoreboard(self)
         self.menu = menu.StartScreen(self)
         self.ship = ship.Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -33,7 +35,8 @@ class AlienInvasion:
         self.alien = alien.Alien(self)
         # self.firing = self.bullet.firing
         # self.count = self.bullet.count
-
+        
+        """Create the first fleet."""
         self._create_fleet()
 
         """Set background color."""
@@ -41,8 +44,7 @@ class AlienInvasion:
 
         """Create the buttons."""
         self.play_button = menu.Button(self, "Play")
-
-        self.lives = menu.Button(self, str(self.stats.ships_left))
+        # self.lives = menu.Button(self, str(self.stats.ships_left))
         
     def run_game(self): 
         """Start the main loop for the game."""
@@ -86,6 +88,7 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.stats.game_active = False
+            pygame.mouse.set_visible(True)
     
     def _alien_invades(self):
         """Respond to a succesful alien invasion."""
@@ -129,6 +132,7 @@ class AlienInvasion:
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
       
     def _check_events(self):
         """Respond to keypresses and mouse events."""
@@ -164,8 +168,10 @@ class AlienInvasion:
         """Start the game when play button is clicked."""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_active:
+            self.settings.initialize_dynamic_settings()
             self.stats.reset_stats()
             self.stats.game_active = True
+            pygame.mouse.set_visible(False)
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
@@ -176,12 +182,14 @@ class AlienInvasion:
         
         else:
             self.screen.fill(self.bg_color)
-            self.lives.update(str(self.stats.ships_left))
+            # self.lives.update(str(self.stats.ships_left))
             self.ship.blitme()
             for bullet in self.bullets.sprites():
                 bullet.draw_bullet()
             self.aliens.draw(self.screen)
 
+            """Draw scoreboard."""
+            self.sb.show_score()
 
 
         """Make the most recently drawn screen visible."""
