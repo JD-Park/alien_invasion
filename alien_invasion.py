@@ -83,6 +83,7 @@ class AlienInvasion:
         """Respond to the ship being hit by an alien."""
         if self.stats.ships_left >= 1:
             self.stats.ships_left -= 1  
+            self.sb.prep_ships()
             self.bullets.empty()     
             self.aliens.empty()       
             self._create_fleet()        
@@ -186,6 +187,7 @@ class AlienInvasion:
             self.stats.game_active = True
             self.sb.prep_score()
             self.sb.prep_level()
+            self.sb.prep_ships()
             pygame.mouse.set_visible(False)
 
     def _update_screen(self):
