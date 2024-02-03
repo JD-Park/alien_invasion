@@ -61,9 +61,48 @@ class StartScreen:
         self.setting = ai_game.settings
         self.screen_rect = ai_game.screen.get_rect()
         
-        self.image = pygame.image.load('images/tmpogs02nuw.png')
+        self.image = pygame.image.load('images/tmpogs02nuw.bmp')
         self.rect = self.image.get_rect()
         self.rect.center = self.screen_rect.center
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)
+
+class GameScreen:
+    """A class to manage the start screen."""
+
+    def __init__(self, ai_game):
+        self.screen = ai_game.screen
+        self.setting = ai_game.settings
+        self.screen_rect = ai_game.screen.get_rect()
+        
+        self.image = pygame.image.load('images/tmpvtw6n17l.bmp')
+        self.rect = self.image.get_rect()
+        self.rect.center = self.screen_rect.center
+
+    def blitme(self):
+        self.screen.blit(self.image, self.rect)
+
+class Title:
+    """A class to manage the start screen."""
+
+    def __init__(self, ai_game, msg):
+        self.screen = ai_game.screen
+        self.setting = ai_game.settings
+        self.screen_rect = ai_game.screen.get_rect()
+        
+        self.text_color = '#F2B31C'
+        self.font = pygame.font.SysFont("Arial", 192)
+        
+        """The button message."""
+        self._prep_msg(msg)
+
+    def _prep_msg(self, msg):
+        """Turn message into rendered image."""
+        self.msg_image = self.font.render(msg, True, self.text_color)
+
+    def blitme(self):
+        """Draw blank button and then draw the message."""
+        self.msg_image_rect = self.msg_image.get_rect()
+        self.msg_image_rect.center = (960, 300)
+        self.screen.blit(self.msg_image, self.msg_image_rect)

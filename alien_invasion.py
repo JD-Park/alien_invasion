@@ -28,6 +28,8 @@ class AlienInvasion:
         self.stats = game_stats.GameStats(self)
         self.sb = scoreboard.Scoreboard(self)
         self.menu = menu.StartScreen(self)
+        self.bg = menu.GameScreen(self)
+        self.title = menu.Title(self, "Alien Invasion!!")
         self.ship = ship.Ship(self)
         self.bullets = pygame.sprite.Group()
         self.bullet = bullet.Bullet(self)
@@ -194,10 +196,12 @@ class AlienInvasion:
         """Draw the menu buttons."""
         if not self.stats.game_active:
             self.menu.blitme()
+            self.title.blitme()
             self.play_button.draw_button()
         
         else:
-            self.screen.fill(self.bg_color)
+            self.bg.blitme()
+            # self.screen.fill(self.bg_color)
             # self.lives.update(str(self.stats.ships_left))
             self.ship.blitme()
             for bullet in self.bullets.sprites():
