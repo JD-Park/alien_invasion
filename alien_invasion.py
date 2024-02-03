@@ -71,7 +71,7 @@ class AlienInvasion:
 
                 """Check for collisions or invasion."""
                 self.collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, 
-                                                        False, True)
+                                                        True, True)
                 if pygame.sprite.spritecollideany(self.ship, self.aliens):
                     self._ship_hit()
                     # print("Ship hit!!!")
